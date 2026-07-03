@@ -345,7 +345,7 @@ class LinuxVCP(VCP):
         if self.last_set is None:
             return
 
-        rate_delay = self.CMD_RATE - time.time() - self.last_set
+        rate_delay = self.CMD_RATE - (time.time() - self.last_set)
         if rate_delay > 0:
             time.sleep(rate_delay)
 
@@ -381,7 +381,9 @@ class LinuxVCP(VCP):
             if self.fd:
                 os.write(self.fd, data)
             else:
-                VCPIOError("unable write to I2C bus: no open file descriptor found")
+                raise VCPIOError(
+                    "unable write to I2C bus: no open file descriptor found"
+                )
         except OSError as e:
             raise VCPIOError("unable write to I2C bus") from e
 
