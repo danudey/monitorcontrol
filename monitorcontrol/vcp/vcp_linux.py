@@ -393,10 +393,12 @@ def get_vcps() -> List[VCP]:
     Returns:
         List of all VCPs detected.
     """
-    vcps = []
+    vcps: List[VCP] = []
 
     # iterate I2C devices
     for device in pyudev.Context().list_devices(subsystem="i2c"):
+        if device.sys_number is None:
+            continue
         vcp = LinuxVCP(device.sys_number)
         try:
             with vcp:

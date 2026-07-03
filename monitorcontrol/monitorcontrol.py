@@ -705,6 +705,7 @@ def _convert_to_dict(caps_str: str) -> dict:
             else:
                 d = result_dict
                 for g in group:
+                    assert g is not None
                     d = d[g]
                 d[val] = {}
             prev_val = val

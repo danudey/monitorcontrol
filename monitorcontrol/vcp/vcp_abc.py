@@ -1,6 +1,8 @@
 import abc
 from types import TracebackType
-from typing import Optional, Tuple, Type
+from typing import Generic, Optional, Tuple, Type, TypeVar
+
+T = TypeVar("T")
 
 
 class VCPError(Exception):
@@ -21,7 +23,7 @@ class VCPPermissionError(VCPError):
     pass
 
 
-class VCP[T](abc.ABC):
+class VCP(Generic[T], abc.ABC):
     @abc.abstractmethod
     def __enter__(self) -> T:
         pass
