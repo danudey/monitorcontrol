@@ -42,6 +42,12 @@ monitorcontrol = "monitorcontrol.__main__:main"
 requires = ["setuptools>=77"]
 build-backend = "setuptools.build_meta"
 
+[tool.coverage.report]
+exclude_also = [
+    # abstract method bodies are never executed
+    "@(abc\\.)?abstractmethod",
+]
+
 [tool.ruff.lint]
 extend-select = [
     # flake8-builtins
