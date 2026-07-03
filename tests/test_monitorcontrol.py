@@ -373,3 +373,8 @@ def test_convert_to_dict_nested():
     caps_str = "DC(00(00 12 13 14))"
     expected = {0xDC: {0: {0: {}, 0x12: {}, 0x13: {}, 0x14: {}}}}
     assert _convert_to_dict(caps_str) == expected
+
+
+def test_convert_to_dict_empty():
+    # capabilities extraction can return an empty string
+    assert _convert_to_dict("") == {}

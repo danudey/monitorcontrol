@@ -1,5 +1,24 @@
+import sys
+from unittest import mock
 import pytest
+from monitorcontrol.vcp import vcp_linux
 from monitorcontrol.vcp.vcp_linux import LinuxVCP
+
+
+@pytest.mark.skipif(
+    not sys.platform.startswith("linux"),
+    reason="Linux-only VCP implementation",
+)
+def test_get_vcps_skips_devices_without_sys_number():
+    # i2c devices without a sysfs number cannot map to a /dev/i2c-* bus and
+    # must be skipped rather than passed to LinuxVCP.
+    device = mock.Mock(sys_number=None)
+    context = mock.Mock()
+    context.list_devices.return_value = [device]
+    with mock.patch.object(vcp_linux, "pyudev") as pyudev_mock:
+        pyudev_mock.Context.return_value = context
+        assert vcp_linux.get_vcps() == []
+    context.list_devices.assert_called_once_with(subsystem="i2c")
 
 
 @pytest.mark.parametrize(
